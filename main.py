@@ -22,7 +22,7 @@ firebase = pyrebase.initialize_app(firebase_config)
 db = firebase.database()
 
 @app.get("/confirm_room")
- async def confirm_room(card: str):
+async def confirm_room(card: str):
      # Retrieve the allowed rooms
      allowed_rooms = db.child("alloweRooms").get().val()
 
