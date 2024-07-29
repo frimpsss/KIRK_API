@@ -24,7 +24,7 @@ db = firebase.database()
 @app.get("/confirm_room")
 async def confirm_room(card: str):
      # Retrieve the allowed rooms
-     allowed_rooms = db.child("alloweRooms").get().val()
+     allowed_rooms = db.child("allowedRooms").get().val()
 
      # Check if the card is allowed for any room
      for room, numbers in allowed_rooms.items():
@@ -66,37 +66,37 @@ async def get_all_rooms():
     # Retrieve the allowed rooms
     allowed_rooms = db.child("allowedRooms").get().val()
     tobeReturned = None
+
     # Check if the card is allowed for any room
-    for  room in allowed_rooms.items():
-        if room[1]['isAssigned'] is False:
-            print(room)
-            tobeReturned = room
+    for room_id, room_data in allowed_rooms.items():
+        # Check if 'isAssigned' key exists and its value is False
+        if room_data.get('isAssigned') == False:
+            tobeReturned = {"room_id": room_id, "room_data": room_data}
             break
-            
 
     if tobeReturned is None:
         tobeReturned = {"room": None, "access": False}
-    
+
     return {"room": tobeReturned}
+
 
 @app.post("/change_first_false_room")
 async def change_first_false_room():
     # Retrieve the allowed rooms
     allowed_rooms = db.child("allowedRooms").get().val()
     tobeReturned = None
+    
     # Check if the card is allowed for any room
-    for  room in allowed_rooms.items():
-        if room[1]['isAssigned'] is False:
-            db.child("allowedRooms").child(room[0]).update({"isAssigned": True})
+    for room_id, room_data in allowed_rooms.items():
+           if room_data.get('isAssigned') == False:
+            b = db.child("allowedRooms").child(room_id).update({"isAssigned": True})
+            tobeReturned = {"room_id": room_id, "room_data": room_data}
             break
-            
-
+    
     if tobeReturned is None:
         tobeReturned = {"room": None, "access": False}
     
-    return {"room": tobeReturned}
-
-
+    return tobeReturned
 
 @app.get("/")
 async def root():
