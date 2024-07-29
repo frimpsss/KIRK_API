@@ -22,16 +22,17 @@ firebase = pyrebase.initialize_app(firebase_config)
 db = firebase.database()
 
 @app.get("/confirm_room")
-async def confirm_room(card: str):
-    # Retrieve the allowed rooms
-    allowed_rooms = db.child("allowedRooms").get().val()
+ async def confirm_room(card: str):
+     # Retrieve the allowed rooms
+     allowed_rooms = db.child("alloweRooms").get().val()
 
-    # Check if the card is allowed for any room
-    for room, cards in allowed_rooms.items():
-        if card in cards:
-            return {"room": room, "access": True}
+     # Check if the card is allowed for any room
+     for room, numbers in allowed_rooms.items():
+         if card in numbers:
+             return {"room": room, "access": True}
 
-    return {"room": None, "access": False}
+     return {"room": None, "access": False}
+
 
 @app.post("/card_data")
 async def receive_card_data(card_id: str):
