@@ -28,7 +28,7 @@ async def confirm_room(card: str):
 
      # Check if the card is allowed for any room
      for room, numbers in allowed_rooms.items():
-         if card in numbers:
+         if numbers.get("cardId") == card:
              return {"room": room, "access": True}
 
      return {"room": None, "access": False}
@@ -42,7 +42,7 @@ async def receive_card_data(card_id: str):
         assigned_room = None
 
         for room, cards in rooms.items():
-            if card_id in cards:
+            if cards.get():
                 assigned_room = room
                 break
 
