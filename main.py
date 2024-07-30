@@ -89,15 +89,20 @@ async def change_first_false_room():
     # Check if the card is allowed for any room
     for room_id, room_data in allowed_rooms.items():
            if room_data.get('isAssigned') == False:
-            b = db.child("allowedRooms").child(room_id).update({"isAssigned": True})
+            db.child("allowedRooms").child(room_id).update({"isAssigned": True})
             tobeReturned = {"room_id": room_id, "room_data": room_data}
             break
     
     if tobeReturned is None:
-        tobeReturned = {"room": None, "access": False}
-    
+        tobeReturned = {"status": False, "message": "no room found"}
+    else:
+        tobeReturned = {"status": True, "message": "success"}
+        
+        
+        
     return tobeReturned
 
 @app.get("/")
 async def root():
     return {"message": "Card Data and Room Confirmation API"}
+
